@@ -12,7 +12,14 @@ const collation = {locale: 'en', strength: 2};
 const auth = async (fastify: FastifyInstance) => {
   // User login
   fastify.post<{Body: UserLoginType}>('/login', {schema: {body: UserLoginSchema}}, async (res, reply) => {
-    // To-do
+    const user = await usersAccounts.findOne({email: res.body.username}, {collation});
+    if (user) {
+      const isValidPass = await argon2.verify(user.password, res.body.password);
+      if (isValidPass) {
+        // To-do
+      }
+    }
+
     reply.code(401).send('Invalid credentials');
   });
 

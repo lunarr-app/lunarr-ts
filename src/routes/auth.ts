@@ -1,6 +1,7 @@
-import type {FastifyInstance} from 'fastify';
+import argon2 from 'argon2';
 import {usersAccounts} from '../lib/database.js';
 import {UserLoginSchema, UserLoginType, UserSignupSchema, UserSignupType} from '../schema/auth.js';
+import type {FastifyInstance} from 'fastify';
 
 /**
  * Create user index for faster query performance
@@ -27,6 +28,7 @@ const auth = async (fastify: FastifyInstance) => {
       return;
     }
 
+    res.body.password = await argon2.hash(res.body.password);
     const created = await usersAccounts.insertOne(res.body);
     reply.code(201).send(created);
   });

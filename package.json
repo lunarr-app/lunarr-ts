@@ -41,6 +41,9 @@
     "typescript": "^5.0.2"
   },
   "ava": {
+    "environmentVariables": {
+      "MONGODB_URI": "mongodb://localhost:27017/lunar_test_ava"
+    },
     "extensions": {
       "ts": "module"
     },

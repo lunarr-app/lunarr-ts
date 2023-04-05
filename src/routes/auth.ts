@@ -12,7 +12,7 @@ const collation = {locale: 'en', strength: 2};
 const auth = async (fastify: FastifyInstance) => {
   // User login
   fastify.post<{Body: UserLoginType}>('/login', {schema: {body: UserLoginSchema}}, async (res, reply) => {
-    const user = await usersAccounts.findOne({email: res.body.username}, {collation});
+    const user = await usersAccounts.findOne({username: res.body.username}, {collation});
     if (user) {
       const isValidPass = await argon2.verify(user.password, res.body.password);
       if (isValidPass) {
@@ -25,11 +25,7 @@ const auth = async (fastify: FastifyInstance) => {
 
   // User signup
   fastify.post<{Body: UserSignupType}>('/signup', {schema: {body: UserSignupSchema}}, async (res, reply) => {
-    res.body.email = res.body.email.toLowerCase(); // ensure email is in lower case
-    const user = await usersAccounts.findOne(
-      {$or: [{email: res.body.email}, {username: res.body.username}]}, // find user by either email or username
-      {collation},
-    );
+    const user = await usersAccounts.findOne({username: res.body.username}, {collation});
     if (user || res.body.username.toLowerCase().trim() === 'ghost') {
       reply.code(409).send('User already exists with that username or email.');
       return;

@@ -53,4 +53,5 @@ export const UserSchemaMongo = schema({
   }),
   sex: types.oneOf(['male', 'female', 'unknown'], {required: true}),
   role: types.oneOf(['admin', 'superuser', 'subscriber'], {required: true}),
+  api_key: types.string({required: true}),
 });

@@ -25,11 +25,13 @@
     "fastify": "^4.15.0",
     "mongodb": "^5.2.0",
     "papr": "^13.0.0",
-    "pino-pretty": "^10.0.0"
+    "pino-pretty": "^10.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@swc/core": "^1.3.46",
     "@types/node": "^18.15.11",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "ava": "^5.2.0",

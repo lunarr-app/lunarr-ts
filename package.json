@@ -18,6 +18,7 @@
   "author": "Sayem Chowdhury",
   "license": "Apache-2.0",
   "dependencies": {
+    "@sinclair/typebox": "^0.26.8",
     "dotenv": "^16.0.3",
     "envalid": "^7.3.1",
     "fastify": "^4.15.0",

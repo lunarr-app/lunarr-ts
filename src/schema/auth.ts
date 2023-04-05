@@ -26,7 +26,6 @@ export const UserSignupSchema = Type.Object({
     description:
       'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
   }),
-  email: Type.String({format: 'email'}),
   password: Type.String({minLength: 6, maxLength: 32}),
   sex: Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')], {default: 'unknown'}),
 });
@@ -43,16 +42,8 @@ export const UserSchemaMongo = schema({
     maxLength: 16,
     pattern: '^[0-9a-zA-Z_-]+$',
   }),
-  email: types.string(),
   password: types.string({
     minLength: 6,
     maxLength: 32,
   }),
-  lastName: types.string({required: true}),
-  orders: types.array(
-    types.object({
-      product: types.string({required: true}),
-      quantity: types.number({required: true}),
-    }),
-  ),
 });

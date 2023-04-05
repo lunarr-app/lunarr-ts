@@ -1,3 +1,4 @@
+import {types, schema} from 'papr';
 import {Type, Static} from '@sinclair/typebox';
 
 export const UserLoginSchema = Type.Object({
@@ -5,13 +6,19 @@ export const UserLoginSchema = Type.Object({
     minLength: 2,
     maxLength: 16,
   }),
-  password: Type.String({minLength: 6, maxLength: 32}),
+  password: Type.String({
+    minLength: 6,
+    maxLength: 32,
+  }),
 });
 
 export type UserLoginType = Static<typeof UserLoginSchema>;
 
 export const UserSignupSchema = Type.Object({
-  displayname: Type.String({minLength: 1, maxLength: 48}),
+  displayname: Type.String({
+    minLength: 1,
+    maxLength: 48,
+  }),
   username: Type.String({
     minLength: 2,
     maxLength: 16,
@@ -25,3 +32,27 @@ export const UserSignupSchema = Type.Object({
 });
 
 export type UserSignupType = Static<typeof UserSignupSchema>;
+
+export const UserSchemaMongo = schema({
+  displayname: types.string({
+    minLength: 1,
+    maxLength: 48,
+  }),
+  username: types.string({
+    minLength: 2,
+    maxLength: 16,
+    pattern: '^[0-9a-zA-Z_-]+$',
+  }),
+  email: types.string(),
+  password: types.string({
+    minLength: 6,
+    maxLength: 32,
+  }),
+  lastName: types.string({required: true}),
+  orders: types.array(
+    types.object({
+      product: types.string({required: true}),
+      quantity: types.number({required: true}),
+    }),
+  ),
+});

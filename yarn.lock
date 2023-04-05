@@ -1932,6 +1932,11 @@ p-timeout@^5.0.2:
   resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-5.1.0.tgz#b3c691cf4415138ce2d9cfe071dba11f0fee085b"
   integrity sha512-auFDyzzzGZZZdHz3BtET9VEz0SE/uMEAx7uWfGPucfzEwwe/xH0iVeZibQmANYE/hp9T2+UUZT5m+BKyrDp3Ew==
 
+papr@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/papr/-/papr-13.0.0.tgz#00dca05ddcb13f47df5fa76c54415629163ee127"
+  integrity sha512-bxKUJy2WWNiW4OjzQKg8fg4XhY+5Cntaud35bBuQFyrBRaKsqqFrmst8YyAl7eoRuIt8XQS/DO02XBITLVoVQQ==
+
 parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"

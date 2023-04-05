@@ -1,7 +1,5 @@
 import fastify from 'fastify';
-import jwt from '@fastify/jwt';
 import auth from './routes/auth.js';
-import {env} from './lib/config.js';
 
 // Fastify instance
 const app = fastify({
@@ -26,12 +24,6 @@ const app = fastify({
       },
     },
   },
-});
-
-// Register json web token
-app.register(jwt, {
-  secret: env.JWT_SECRET,
-  sign: {expiresIn: '30d'},
 });
 
 // Root endpoint for ping

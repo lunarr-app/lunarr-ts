@@ -18,7 +18,6 @@
   "author": "Sayem Chowdhury",
   "license": "Apache-2.0",
   "dependencies": {
-    "@fastify/jwt": "^6.7.1",
     "@sinclair/typebox": "^0.26.8",
     "argon2": "^0.30.3",
     "dotenv": "^16.0.3",

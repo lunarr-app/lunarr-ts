@@ -16,12 +16,12 @@ const auth = async (fastify: FastifyInstance) => {
     if (user) {
       const isValidPass = await argon2.verify(user.password, res.body.password);
       if (isValidPass) {
-        const token = fastify.jwt.sign({
-          _id: user._id,
-          username: user.username,
-          role: user.role,
-        });
-        return {token};
+        // const token = fastify.jwt.sign({
+        //   _id: user._id,
+        //   username: user.username,
+        //   role: user.role,
+        // });
+        // return {token};
       }
     }
 

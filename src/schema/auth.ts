@@ -38,16 +38,19 @@ export const UserSchemaMongo = schema({
   displayname: types.string({
     minLength: 1,
     maxLength: 48,
+    required: true,
   }),
   username: types.string({
     minLength: 2,
     maxLength: 16,
     pattern: usernamePattern,
+    required: true,
   }),
   password: types.string({
     minLength: 6,
     maxLength: 32,
+    required: true,
   }),
-  sex: types.oneOf(['male', 'female', 'unknown']),
-  role: types.oneOf(['admin', 'superuser', 'subscriber']),
+  sex: types.oneOf(['male', 'female', 'unknown'], {required: true}),
+  role: types.oneOf(['admin', 'superuser', 'subscriber'], {required: true}),
 });

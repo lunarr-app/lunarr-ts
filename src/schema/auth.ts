@@ -1,6 +1,8 @@
 import {types, schema} from 'papr';
 import {Type, Static} from '@sinclair/typebox';
 
+const usernamePattern = '^[0-9a-zA-Z_-]+$';
+
 export const UserLoginSchema = Type.Object({
   username: Type.String({
     minLength: 2,
@@ -22,7 +24,7 @@ export const UserSignupSchema = Type.Object({
   username: Type.String({
     minLength: 2,
     maxLength: 16,
-    pattern: '^[0-9a-zA-Z_-]+$',
+    pattern: usernamePattern,
     description:
       'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
   }),
@@ -40,10 +42,12 @@ export const UserSchemaMongo = schema({
   username: types.string({
     minLength: 2,
     maxLength: 16,
-    pattern: '^[0-9a-zA-Z_-]+$',
+    pattern: usernamePattern,
   }),
   password: types.string({
     minLength: 6,
     maxLength: 32,
   }),
+  sex: types.oneOf(['male', 'female', 'unknown']),
+  role: types.oneOf(['admin', 'superuser', 'subscriber']),
 });

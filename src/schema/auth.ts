@@ -1,4 +1,3 @@
-import {types, schema} from 'papr';
 import {Type, Static} from '@sinclair/typebox';
 
 const usernamePattern = '^[0-9a-zA-Z_-]+$';
@@ -34,24 +33,22 @@ export const UserSignupSchema = Type.Object({
 
 export type UserSignupType = Static<typeof UserSignupSchema>;
 
-export const UserSchemaMongo = schema({
-  displayname: types.string({
+export const UserSchemaMongo = Type.Object({
+  displayname: Type.String({
     minLength: 1,
     maxLength: 48,
-    required: true,
   }),
-  username: types.string({
+  username: Type.String({
     minLength: 2,
     maxLength: 16,
     pattern: usernamePattern,
-    required: true,
+    description:
+      'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
   }),
-  password: types.string({
-    minLength: 6,
-    maxLength: 32,
-    required: true,
-  }),
-  sex: types.oneOf(['male', 'female', 'unknown'], {required: true}),
-  role: types.oneOf(['admin', 'superuser', 'subscriber'], {required: true}),
-  api_key: types.string({required: true}),
+  password: Type.String({minLength: 6, maxLength: 32}),
+  sex: Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')], {default: 'unknown'}),
+  role: Type.Union([Type.Literal('admin'), Type.Literal('superuser'), Type.Literal('subscriber')]),
+  api_key: Type.String(),
 });
+
+export type UserTypeMongo = Static<typeof UserSchemaMongo>;

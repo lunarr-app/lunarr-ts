@@ -1,3 +1,4 @@
+import {v4 as uuidv4} from 'uuid';
 import argon2 from 'argon2';
 import {usersAccounts} from '../lib/database.js';
 import {UserLoginSchema, UserLoginType, UserSignupSchema, UserSignupType} from '../schema/auth.js';
@@ -16,12 +17,7 @@ const auth = async (fastify: FastifyInstance) => {
     if (user) {
       const isValidPass = await argon2.verify(user.password, res.body.password);
       if (isValidPass) {
-        // const token = fastify.jwt.sign({
-        //   _id: user._id,
-        //   username: user.username,
-        //   role: user.role,
-        // });
-        // return {token};
+        return {api_key: user.api_key};
       }
     }
 
@@ -36,8 +32,14 @@ const auth = async (fastify: FastifyInstance) => {
       return;
     }
 
+    const totalUsers = await usersAccounts.countDocuments();
+
     res.body.password = await argon2.hash(res.body.password);
-    const created = await usersAccounts.insertOne(res.body);
+    const created = await usersAccounts.insertOne({
+      ...res.body,
+      role: totalUsers === 0 ? 'admin' : 'subscriber',
+      api_key: uuidv4(),
+    });
     reply.code(201).send(created);
   });
 };

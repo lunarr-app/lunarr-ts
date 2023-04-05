@@ -1,22 +1,12 @@
 import {MongoClient} from 'mongodb';
+import Papr from 'papr';
 import {env} from './config.js';
-import type {UserSignupType} from '../schema/auth';
+import {UserSchemaMongo} from '../schema/auth.js';
 
-// Create the database
-const mongo = new MongoClient(env.MONGODB_URI, {retryWrites: true, w: 'majority'});
-
-// Connect the database
-await mongo.connect();
+const client = new MongoClient(env.MONGODB_URI, {retryWrites: true, w: 'majority'});
+const papr = new Papr();
+papr.initialize(client.db('test'));
+await papr.updateSchemas();
 
 // Export collections
-export const usersAccounts = mongo.db().collection<UserSignupType>('users.accounts');
-
-// Create indexes
-await usersAccounts.createIndexes([
-  {
-    key: {username: 1},
-  },
-  {
-    key: {email: 1},
-  },
-]);
+export const usersAccounts = papr.model('users.accounts', UserSchemaMongo);

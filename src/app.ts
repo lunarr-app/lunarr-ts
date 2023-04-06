@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import auth from './routes/auth.js';
+import users from './routes/users.js';
 
 // Fastify instance
 const app = fastify({
@@ -29,7 +30,8 @@ const app = fastify({
 // Root endpoint for ping
 app.get<{Reply: Record<string, string>}>('/', {logLevel: 'error'}, async () => ({hello: 'world'}));
 
-// User auth
+// User auth and info
 app.register(auth, {prefix: 'auth'});
+app.register(users, {prefix: 'api'});
 
 export default app;

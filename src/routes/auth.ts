@@ -1,5 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import argon2 from 'argon2';
+import dayjs from 'dayjs';
 import {usersAccounts} from '../lib/database.js';
 import {UserLoginSchema, UserLoginType, UserSignupSchema, UserSignupType} from '../schema/auth.js';
 import type {FastifyInstance} from 'fastify';
@@ -33,12 +34,16 @@ const auth = async (fastify: FastifyInstance) => {
     }
 
     const totalUsers = await usersAccounts.countDocuments();
+    const timeNowIso = dayjs().toISOString();
 
     res.body.password = await argon2.hash(res.body.password);
     const created = await usersAccounts.insertOne({
       ...res.body,
       role: totalUsers === 0 ? 'admin' : 'subscriber',
       api_key: uuidv4(),
+      created_at: timeNowIso,
+      last_seen_at: timeNowIso,
+      current_status: 'active',
     });
     reply.code(201).send(created);
   });

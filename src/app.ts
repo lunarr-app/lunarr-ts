@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
+import {usersAccounts} from './lib/database.js';
 
 // Fastify instance
 const app = fastify({
@@ -32,6 +33,14 @@ app.get<{Reply: Record<string, string>}>('/', {logLevel: 'error'}, async () => (
 
 // User auth and info
 app.register(auth, {prefix: 'auth'});
-app.register(users, {prefix: 'api'});
+app.register(users, {
+  prefix: 'api',
+  preValidation: async (request, reply) => {
+    const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']}, {projection: {_id: 1}});
+    if (!user) {
+      reply.code(401).send('Invalid api key');
+    }
+  },
+});
 
 export default app;

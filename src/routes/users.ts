@@ -3,15 +3,13 @@ import type {FastifyInstance, RouteShorthandOptions} from 'fastify';
 
 const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) => {
   fastify.get('/me', options, async (res) => {
-    const user = usersAccounts.findOne(
+    const user = await usersAccounts.findOne(
       {api_key: res.headers['x-api-key']},
       {
-        projection: {
-          password: 0,
-        },
+        projection: {password: 0}, // emit password hash
       },
     );
-    // To-do
+    return user;
   });
 };
 

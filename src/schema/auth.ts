@@ -49,6 +49,14 @@ export const UserSchemaMongo = Type.Object({
   sex: Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')], {default: 'unknown'}),
   role: Type.Union([Type.Literal('admin'), Type.Literal('superuser'), Type.Literal('subscriber')]),
   api_key: Type.String(),
+  created_at: Type.String(),
+  last_seen_at: Type.String(),
+  current_status: Type.Union([
+    Type.Literal('active'),
+    Type.Literal('restricted'),
+    Type.Literal('disabled'),
+    Type.Literal('banned'),
+  ]),
 });
 
 export type UserTypeMongo = Static<typeof UserSchemaMongo>;

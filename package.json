@@ -26,6 +26,7 @@
     "fastify": "^4.15.0",
     "mongodb": "^5.2.0",
     "pino-pretty": "^10.0.0",
+    "tmdb-ts": "^0.1.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

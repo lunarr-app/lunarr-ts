@@ -3,7 +3,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 12,
@@ -11,10 +11,12 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': ['error'],
+    'prettier/prettier': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    'no-console': 'warn',
+    'no-debugger': 'warn',
   },
   ignorePatterns: ['dist/**/*'],
 };

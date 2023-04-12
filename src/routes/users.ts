@@ -21,6 +21,39 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
     // Return user object if found
     return user;
   });
+
+  // Get user lists
+  fastify.get(
+    '/lists',
+    {
+      ...options,
+      // Pre-handler to check if user is an admin
+      preHandler: async (request, reply) => {
+        // Get the user from the database by api key
+        const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']});
+
+        // Return 401 error if user not found or not an admin
+        if (user?.role !== 'admin') {
+          reply.status(401).send('Unauthorized');
+          return;
+        }
+      },
+    },
+    async () => {
+      // Find all users in the database and exclude password hash from response
+      const users = await usersAccounts
+        .find(
+          {},
+          {
+            projection: {password: 0},
+          },
+        )
+        .toArray();
+
+      // Return array of user objects
+      return users;
+    },
+  );
 };
 
 export default users;

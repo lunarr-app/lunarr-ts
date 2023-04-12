@@ -38,7 +38,7 @@ app.register(users, {
   preValidation: async (request, reply) => {
     const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']}, {projection: {_id: 1}});
     if (!user) {
-      reply.code(401).send('Invalid api key');
+      reply.code(401).send({error: 'Unauthorized', message: 'Invalid API key'});
     }
   },
 });

@@ -34,7 +34,7 @@ app.get<{Reply: Record<string, string>}>('/', {logLevel: 'error'}, async () => (
 // User auth and info
 app.register(auth, {prefix: 'auth'});
 app.register(users, {
-  prefix: 'api',
+  prefix: 'users',
   preValidation: async (request, reply) => {
     const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']}, {projection: {_id: 1}});
     if (!user) {

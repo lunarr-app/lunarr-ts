@@ -2,6 +2,7 @@ import {v4 as uuidv4} from 'uuid';
 import argon2 from 'argon2';
 import dayjs from 'dayjs';
 import {usersAccounts} from '../lib/database.js';
+import {RESTRICTED_USERNAMES} from '../lib/username.js';
 import {UserLoginSchema, UserLoginType, UserSignupSchema, UserSignupType} from '../schema/auth.js';
 import type {FastifyInstance} from 'fastify';
 
@@ -28,8 +29,13 @@ const auth = async (fastify: FastifyInstance) => {
   // User signup
   fastify.post<{Body: UserSignupType}>('/signup', {schema: {body: UserSignupSchema}}, async (res, reply) => {
     const user = await usersAccounts.findOne({username: res.body.username}, {collation});
-    if (user || res.body.username.toLowerCase().trim() === 'ghost') {
-      reply.code(409).send('User already exists with that username or email.');
+    if (user) {
+      reply.code(409).send('An user already exists with that username.');
+      return;
+    }
+
+    if (RESTRICTED_USERNAMES.includes(res.body.username.toLowerCase())) {
+      reply.code(409).send('Username forbidden. Try different usernames.');
       return;
     }
 

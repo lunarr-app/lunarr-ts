@@ -4,7 +4,7 @@ import type {UserTypeMongo} from '../schema/auth';
 import type {MovieList} from '../types/database';
 
 // Create a new MongoClient instance with the MongoDB URI and options
-const mongo = new MongoClient(env.MONGODB_URI, {retryWrites: true, w: 'majority'});
+export const mongo = new MongoClient(env.MONGODB_URI, {retryWrites: true, w: 'majority'});
 
 // Connect to the MongoDB database
 await mongo.connect();

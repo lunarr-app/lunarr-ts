@@ -47,12 +47,14 @@
   },
   "ava": {
     "environmentVariables": {
+      "DISABLE_FASTIFY_LOGGING": "true",
       "MONGODB_URI": "mongodb://127.0.0.1:27017/lunarr_test_ava"
     },
     "extensions": {
       "ts": "module"
     },
     "nodeArguments": [
+      "--no-warnings",
       "--loader=ts-node/esm"
     ],
     "concurrency": 1,

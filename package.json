@@ -55,6 +55,7 @@
     "nodeArguments": [
       "--loader=ts-node/esm"
     ],
+    "concurrency": 1,
     "timeout": "30s",
     "verbose": true
   }

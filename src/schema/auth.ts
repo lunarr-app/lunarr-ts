@@ -33,6 +33,22 @@ export const UserSignupSchema = Type.Object({
 
 export type UserSignupType = Static<typeof UserSignupSchema>;
 
+export const UserUpdateSchema = Type.Object(
+  {
+    displayname: Type.Optional(
+      Type.String({
+        minLength: 1,
+        maxLength: 48,
+      }),
+    ),
+    password: Type.Optional(Type.String({minLength: 6, maxLength: 32})),
+    sex: Type.Optional(Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')])),
+  },
+  {additionalProperties: false},
+);
+
+export type UserUpdateType = Static<typeof UserUpdateSchema>;
+
 export const UserSchemaMongo = Type.Object({
   displayname: Type.String({
     minLength: 1,

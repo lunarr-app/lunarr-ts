@@ -1,4 +1,6 @@
+import argon2 from 'argon2';
 import {usersAccounts} from '../lib/database.js';
+import {UserUpdateSchema, UserUpdateType} from '../schema/auth.js';
 import type {FastifyInstance, RouteShorthandOptions} from 'fastify';
 
 const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) => {
@@ -53,6 +55,35 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
 
     // Return user object if found
     return user;
+  });
+
+  // User data update
+  fastify.put<{Body: UserUpdateType}>('/me', {schema: {body: UserUpdateSchema}}, async (request, reply) => {
+    // Find the user based on the API key provided in the request header
+    const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']});
+
+    // If the user is not found, return a 404 error
+    if (!user) {
+      reply.status(404).send('User not found');
+      return;
+    }
+
+    // Update the user data based on the values provided in the request body
+    user.displayname = request.body.displayname || user.displayname;
+    user.sex = request.body.sex || user.sex;
+
+    // If a new password is provided, hash it and update the user's password
+    if (request.body.password) {
+      const passwordHash = await argon2.hash(request.body.password);
+      user.password = passwordHash;
+    }
+
+    // Update the user's data in the database
+    await usersAccounts.updateOne({_id: user._id}, user);
+
+    // Return a success message with the updated user data (excluding the password)
+    const {password, ...updatedUser} = user;
+    reply.send({message: 'User data updated.', user: updatedUser});
   });
 };
 

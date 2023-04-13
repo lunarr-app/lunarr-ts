@@ -47,7 +47,7 @@
   },
   "ava": {
     "environmentVariables": {
-      "MONGODB_URI": "mongodb://localhost:27017/lunarr_test_ava"
+      "MONGODB_URI": "mongodb://127.0.0.1:27017/lunarr_test_ava"
     },
     "extensions": {
       "ts": "module"

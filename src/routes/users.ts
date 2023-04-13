@@ -79,7 +79,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
     }
 
     // Update the user's data in the database
-    await usersAccounts.updateOne({_id: user._id}, user);
+    await usersAccounts.updateOne({_id: user._id}, {$set: user});
 
     // Return a success message with the updated user data (excluding the password)
     const {password, ...updatedUser} = user;

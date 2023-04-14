@@ -3,7 +3,16 @@ import argon2 from 'argon2';
 import dayjs from 'dayjs';
 import {usersAccounts} from '../lib/database.js';
 import {RESTRICTED_USERNAMES} from '../lib/username.js';
-import {UserLoginSchema, UserLoginType, UserSignupSchema, UserSignupType} from '../schema/auth.js';
+import {
+  UserLoginSchema,
+  UserLoginSchema200,
+  UserLoginSchema401,
+  UserLoginType,
+  UserLoginType200,
+  UserLoginType401,
+  UserSignupSchema,
+  UserSignupType,
+} from '../schema/auth.js';
 import type {FastifyInstance} from 'fastify';
 
 // Create user index for faster query performance
@@ -12,17 +21,29 @@ const collation = {locale: 'en', strength: 2};
 
 const auth = async (fastify: FastifyInstance) => {
   // User login
-  fastify.post<{Body: UserLoginType}>('/login', {schema: {body: UserLoginSchema}}, async (req, reply) => {
-    const user = await usersAccounts.findOne({username: req.body.username}, {collation});
+  fastify.post<{Body: UserLoginType; Reply: UserLoginType200 | UserLoginType401}>(
+    '/login',
+    {
+      schema: {
+        body: UserLoginSchema,
+        response: {
+          200: UserLoginSchema200,
+          401: UserLoginSchema401,
+        },
+      },
+    },
+    async (req, reply) => {
+      const user = await usersAccounts.findOne({username: req.body.username}, {collation});
 
-    // Check if the user exists and password is valid
-    if (user && (await argon2.verify(user.password, req.body.password))) {
-      return {api_key: user.api_key};
-    }
+      // Check if the user exists and password is valid
+      if (user && (await argon2.verify(user.password, req.body.password))) {
+        return {api_key: user.api_key};
+      }
 
-    // Return 401 Unauthorized error if invalid credentials
-    reply.status(401).send('Invalid username or password');
-  });
+      // Return 401 Unauthorized error if invalid credentials
+      reply.status(401).send('Invalid username or password');
+    },
+  );
 
   // User signup
   fastify.post<{Body: UserSignupType}>('/signup', {schema: {body: UserSignupSchema}}, async (req, reply) => {

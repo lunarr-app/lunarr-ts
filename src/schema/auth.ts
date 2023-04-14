@@ -15,6 +15,16 @@ export const UserLoginSchema = Type.Object({
 
 export type UserLoginType = Static<typeof UserLoginSchema>;
 
+export const UserLoginSchema200 = Type.Object({
+  api_key: Type.String(),
+});
+
+export type UserLoginType200 = Static<typeof UserLoginSchema200>;
+
+export const UserLoginSchema401 = Type.Literal('Invalid username or password');
+
+export type UserLoginType401 = Static<typeof UserLoginSchema401>;
+
 export const UserSignupSchema = Type.Object({
   displayname: Type.String({
     minLength: 1,

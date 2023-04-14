@@ -43,6 +43,14 @@ export const UserSignupSchema = Type.Object({
 
 export type UserSignupType = Static<typeof UserSignupSchema>;
 
+export const UserSignupSchema200 = Type.Literal('User created successfully.');
+
+export type UserSignupType200 = Static<typeof UserSignupSchema200>;
+
+export const UserSignupSchema409 = Type.String();
+
+export type UserSignupType409 = Static<typeof UserSignupSchema409>;
+
 export const UserUpdateSchema = Type.Object(
   {
     displayname: Type.Optional(

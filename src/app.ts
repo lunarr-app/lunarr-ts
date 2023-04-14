@@ -1,4 +1,6 @@
 import fastify, {FastifyRequest, FastifyReply} from 'fastify';
+import swagger from '@fastify/swagger';
+import swaggerui from '@fastify/swagger-ui';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
@@ -37,6 +39,12 @@ const app = fastify({
           },
         },
       },
+});
+
+// Register swagger to generate openapi specs
+await app.register(swagger);
+await app.register(swaggerui, {
+  routePrefix: '/documentation',
 });
 
 // Root endpoint for ping

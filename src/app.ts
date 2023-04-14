@@ -1,8 +1,16 @@
-import fastify from 'fastify';
+import fastify, {FastifyRequest, FastifyReply} from 'fastify';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
+import movies from './routes/movies.js';
 import {usersAccounts} from './lib/database.js';
 import {env} from './lib/config.js';
+
+const preValidation = async (request: FastifyRequest, reply: FastifyReply) => {
+  const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']}, {projection: {_id: 1}});
+  if (!user) {
+    reply.code(401).send({error: 'Unauthorized', message: 'Invalid API key'});
+  }
+};
 
 // Fastify instance
 const app = fastify({
@@ -38,12 +46,13 @@ app.get<{Reply: Record<string, string>}>('/', {logLevel: 'error'}, async () => (
 app.register(auth, {prefix: 'auth'});
 app.register(users, {
   prefix: 'users',
-  preValidation: async (request, reply) => {
-    const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']}, {projection: {_id: 1}});
-    if (!user) {
-      reply.code(401).send({error: 'Unauthorized', message: 'Invalid API key'});
-    }
-  },
+  preValidation,
+});
+
+// Movies endpoint
+app.register(movies, {
+  prefix: 'movies',
+  preValidation,
 });
 
 export default app;

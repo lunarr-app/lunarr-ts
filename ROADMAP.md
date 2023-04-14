@@ -11,9 +11,9 @@
 
 | Task                                      | Status      |
 | ----------------------------------------- | ----------- |
-| Develop API routes for movies             | Not started |
+| Develop API routes for movies             | In progress |
 | Develop API routes for TV shows           | Not started |
-| Add support for pagination and filtering  | Not started |
+| Add support for pagination and filtering  | In progress |
 | Allow users to edit and delete media      | Not started |
 | Implement system settings and preferences | Not started |
 

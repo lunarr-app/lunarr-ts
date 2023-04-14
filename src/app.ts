@@ -43,7 +43,22 @@ const app = fastify({
 });
 
 // Register swagger to generate openapi specs
-await app.register(swagger);
+await app.register(swagger, {
+  swagger: {
+    info: {
+      title: 'Lunarr',
+      description: 'swagger api specs',
+      version: '0.0.1',
+    },
+    securityDefinitions: {
+      apiKey: {
+        type: 'apiKey',
+        name: 'x-api-key',
+        in: 'header',
+      },
+    },
+  },
+});
 await app.register(swaggerui, {
   routePrefix: '/documentation',
 });

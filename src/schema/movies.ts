@@ -7,7 +7,7 @@ export const MovieResultsQuerySchema = Type.Object({
   }),
   page: Type.Number({
     minimum: 1,
-    default: 20,
+    default: 1,
   }),
 });
 

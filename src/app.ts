@@ -51,7 +51,7 @@ app.register(users, {
 
 // Movies endpoint
 app.register(movies, {
-  prefix: 'movies',
+  prefix: 'media',
   preValidation,
 });
 

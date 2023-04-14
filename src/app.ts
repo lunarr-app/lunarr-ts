@@ -5,6 +5,7 @@ import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
 import {usersAccounts} from './lib/database.js';
+import {RootEndointSchema, RootEndointType} from './schema/root.js';
 import {env} from './lib/config.js';
 
 const preValidation = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -48,7 +49,18 @@ await app.register(swaggerui, {
 });
 
 // Root endpoint for ping
-app.get<{Reply: Record<string, string>}>('/', {logLevel: 'error'}, async () => ({hello: 'world'}));
+app.get<{Reply: RootEndointType}>(
+  '/',
+  {
+    logLevel: 'error',
+    schema: {
+      response: {
+        200: RootEndointSchema,
+      },
+    },
+  },
+  async () => ({hello: 'world'}),
+);
 
 // User auth and info
 app.register(auth, {prefix: 'auth'});

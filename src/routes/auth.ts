@@ -1,21 +1,16 @@
 import {v4 as uuidv4} from 'uuid';
 import argon2 from 'argon2';
 import dayjs from 'dayjs';
+import {Static} from '@sinclair/typebox';
 import {usersAccounts} from '../lib/database.js';
 import {RESTRICTED_USERNAMES} from '../lib/username.js';
 import {
   UserLoginSchema,
   UserLoginSchema200,
   UserLoginSchema401,
-  UserLoginType,
-  UserLoginType200,
-  UserLoginType401,
   UserSignupSchema,
   UserSignupSchema200,
   UserSignupSchema409,
-  UserSignupType,
-  UserSignupType200,
-  UserSignupType409,
 } from '../schema/auth.js';
 import type {FastifyInstance} from 'fastify';
 
@@ -25,7 +20,10 @@ const collation = {locale: 'en', strength: 2};
 
 const auth = async (fastify: FastifyInstance) => {
   // User login
-  fastify.post<{Body: UserLoginType; Reply: UserLoginType200 | UserLoginType401}>(
+  fastify.post<{
+    Body: Static<typeof UserLoginSchema>;
+    Reply: Static<typeof UserLoginSchema200> | Static<typeof UserLoginSchema401>;
+  }>(
     '/login',
     {
       schema: {
@@ -50,7 +48,10 @@ const auth = async (fastify: FastifyInstance) => {
   );
 
   // User signup
-  fastify.post<{Body: UserSignupType; Reply: UserSignupType200 | UserSignupType409}>(
+  fastify.post<{
+    Body: Static<typeof UserSignupSchema>;
+    Reply: Static<typeof UserSignupSchema200> | Static<typeof UserSignupSchema409>;
+  }>(
     '/signup',
     {
       schema: {

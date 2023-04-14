@@ -1,11 +1,12 @@
 import fastify, {FastifyRequest, FastifyReply} from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerui from '@fastify/swagger-ui';
+import {Static} from '@sinclair/typebox';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
 import {usersAccounts} from './lib/database.js';
-import {RootEndointSchema, RootEndointType} from './schema/root.js';
+import {RootEndointSchema} from './schema/root.js';
 import {env} from './lib/config.js';
 
 const preValidation = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -64,7 +65,7 @@ await app.register(swaggerui, {
 });
 
 // Root endpoint for ping
-app.get<{Reply: RootEndointType}>(
+app.get<{Reply: Static<typeof RootEndointSchema>}>(
   '/',
   {
     logLevel: 'error',

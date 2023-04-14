@@ -1,6 +1,7 @@
 import {MongoClient} from 'mongodb';
 import {env} from './config.js';
-import type {UserTypeMongo} from '../schema/auth';
+import {Static} from '@sinclair/typebox';
+import {UserSchemaMongo} from '../schema/auth';
 import type {MovieList} from '../types/database';
 
 // Create a new MongoClient instance with the MongoDB URI and options
@@ -13,7 +14,7 @@ await mongo.connect();
 await mongo.db().command({ping: 1});
 
 // Export MongoDB collections as typed objects
-export const usersAccounts = mongo.db().collection<UserTypeMongo>('users.accounts');
+export const usersAccounts = mongo.db().collection<Static<typeof UserSchemaMongo>>('users.accounts');
 export const moviesLists = mongo.db().collection<MovieList>('movies.lists');
 
 // Create indexes on relevant fields for improved query performance

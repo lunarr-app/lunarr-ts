@@ -1,4 +1,4 @@
-import {Type, Static} from '@sinclair/typebox';
+import {Type} from '@sinclair/typebox';
 
 const usernamePattern = '^[0-9a-zA-Z_-]+$';
 
@@ -13,17 +13,11 @@ export const UserLoginSchema = Type.Object({
   }),
 });
 
-export type UserLoginType = Static<typeof UserLoginSchema>;
-
 export const UserLoginSchema200 = Type.Object({
   api_key: Type.String(),
 });
 
-export type UserLoginType200 = Static<typeof UserLoginSchema200>;
-
 export const UserLoginSchema401 = Type.Literal('Invalid username or password');
-
-export type UserLoginType401 = Static<typeof UserLoginSchema401>;
 
 export const UserSignupSchema = Type.Object({
   displayname: Type.String({
@@ -41,15 +35,9 @@ export const UserSignupSchema = Type.Object({
   sex: Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')], {default: 'unknown'}),
 });
 
-export type UserSignupType = Static<typeof UserSignupSchema>;
-
 export const UserSignupSchema200 = Type.Literal('User created successfully.');
 
-export type UserSignupType200 = Static<typeof UserSignupSchema200>;
-
 export const UserSignupSchema409 = Type.String();
-
-export type UserSignupType409 = Static<typeof UserSignupSchema409>;
 
 export const UserUpdateSchema = Type.Object(
   {
@@ -64,8 +52,6 @@ export const UserUpdateSchema = Type.Object(
   },
   {additionalProperties: false},
 );
-
-export type UserUpdateType = Static<typeof UserUpdateSchema>;
 
 export const UserSchemaMongo = Type.Object({
   displayname: Type.String({
@@ -92,5 +78,3 @@ export const UserSchemaMongo = Type.Object({
     Type.Literal('banned'),
   ]),
 });
-
-export type UserTypeMongo = Static<typeof UserSchemaMongo>;

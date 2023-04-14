@@ -1,4 +1,4 @@
-import {Type, Static} from '@sinclair/typebox';
+import {Type} from '@sinclair/typebox';
 
 export const MovieResultsQuerySchema = Type.Object({
   limit: Type.Number({
@@ -10,5 +10,3 @@ export const MovieResultsQuerySchema = Type.Object({
     default: 1,
   }),
 });
-
-export type MovieResultsQueryType = Static<typeof MovieResultsQuerySchema>;

@@ -5,9 +5,11 @@ import {MovieDetails} from '../lib/tmdb/schema/movie.js';
 export const MovieResultsQuery = {
   headers: API_HEADERS,
   querystring: Type.Object({
-    query: Type.Union([Type.String(), Type.Null(), Type.Undefined()], {
-      description: 'Search query string. If provided, search results will be filtered based on this query string.',
-    }),
+    query: Type.Optional(
+      Type.String({
+        description: 'Search query string. If provided, search results will be filtered based on this query string.',
+      }),
+    ),
     limit: Type.Integer({
       minimum: 1,
       default: 20,

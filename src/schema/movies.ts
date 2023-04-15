@@ -5,13 +5,18 @@ import {MovieDetails} from '../lib/tmdb/schema/movie.js';
 export const MovieResultsQuery = {
   headers: API_HEADERS,
   querystring: Type.Object({
-    limit: Type.Number({
+    query: Type.Union([Type.String(), Type.Null(), Type.Undefined()], {
+      description: 'Search query string. If provided, search results will be filtered based on this query string.',
+    }),
+    limit: Type.Integer({
       minimum: 1,
       default: 20,
+      description: 'Number of results per page',
     }),
-    page: Type.Number({
+    page: Type.Integer({
       minimum: 1,
       default: 1,
+      description: 'Page number of results',
     }),
   }),
   response: {
@@ -22,8 +27,9 @@ export const MovieResultsQuery = {
           files: Type.Array(Type.String()),
         }),
       ),
-      page: Type.Number(),
-      total: Type.Number(),
+      limit: Type.Integer(),
+      page: Type.Integer(),
+      total: Type.Integer(),
     }),
   },
   ...SCHEMA_SECUIRTY,

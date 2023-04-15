@@ -1,6 +1,6 @@
-import type {MovieDetails} from 'tmdb-ts';
+import type {MovieDetailsType} from '../lib/tmdb/schema/movie.js';
 
 export interface MovieList {
-  tmdb: MovieDetails;
+  tmdb: MovieDetailsType;
   files: string[];
 }

@@ -1,5 +1,6 @@
 import {Type, Static} from '@sinclair/typebox';
 import {API_HEADERS, SCHEMA_SECUIRTY} from './auth.js';
+import {MovieDetails} from '../lib/tmdb/schema/movie.js';
 
 export const MovieResultsQuery = {
   headers: API_HEADERS,
@@ -15,7 +16,12 @@ export const MovieResultsQuery = {
   }),
   response: {
     200: Type.Object({
-      results: Type.Array(Type.Any()),
+      results: Type.Array(
+        Type.Object({
+          tmdb: MovieDetails,
+          files: Type.Array(Type.String()),
+        }),
+      ),
       page: Type.Number(),
       total: Type.Number(),
     }),

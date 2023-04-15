@@ -2,6 +2,7 @@ import TMDB from 'tmdb-ts';
 import {opendir} from 'fs/promises';
 import {filenameParse} from '@ctrl/video-filename-parser';
 import {moviesLists} from './database.js';
+import type {MovieDetailsType} from './tmdb/schema/movie.js';
 
 // List of valid video file extensions
 const VIDEO_EXTENSIONS = ['mp4', 'mov', 'avi', 'mkv', 'webm'];
@@ -46,7 +47,7 @@ export const scanMediaDirectory = async (path: string): Promise<void> => {
           if (movie.results.at(0)) {
             const data = await tmdb.movies.details(movie.results[0].id);
             await moviesLists.insertOne({
-              tmdb: data,
+              tmdb: data as MovieDetailsType,
               files: [entryPath],
             });
           }

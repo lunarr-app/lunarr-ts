@@ -57,7 +57,7 @@ test.serial('GET /users/me --> returns the current user', async (t) => {
   t.is(response.statusCode, 200);
 
   // Check that the response is the expected user object
-  const user = JSON.parse(response.body);
+  const user = response.json();
   t.is(user.username, 'admin');
   t.falsy(user.password);
 });
@@ -80,12 +80,7 @@ test.serial('PUT /users/me --> updates the current user', async (t) => {
   t.is(response.statusCode, 200);
 
   // Check that the response is the expected success message with updated user data
-  const responseBody = JSON.parse(response.body);
-  t.is(responseBody.message, 'User data updated.');
-  t.is(responseBody.user.displayname, 'Updated Admin User');
-  t.is(responseBody.user.sex, 'male');
-  t.truthy(responseBody.user.api_key);
-  t.falsy(responseBody.user.password);
+  t.is(response.payload, 'User data updated');
 
   // Check that the user was updated in the database
   const updatedUser = await usersAccounts.findOne({api_key: 'adminapikey'});

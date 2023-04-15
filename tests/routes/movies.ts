@@ -9,6 +9,7 @@ const sampleMovies: MovieList[] = [
     tmdb: {
       adult: false,
       backdrop_path: '/w7RDIgQM6bLT7JXtH4iUQd3Iwxm.jpg',
+      belongs_to_collection: null,
       budget: 63000000,
       genres: [
         {id: 18, name: 'Drama'},
@@ -78,6 +79,6 @@ test('should return all movies', async (t) => {
     },
   });
   t.is(response.statusCode, 200);
-  const movies = JSON.parse(response.payload);
+  const movies = response.json();
   t.is(movies.results.length, 1);
 });

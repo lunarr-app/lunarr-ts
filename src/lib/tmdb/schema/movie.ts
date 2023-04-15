@@ -23,8 +23,8 @@ export const MovieDetails = Type.Object({
   id: Type.Integer(),
   imdb_id: Type.Union([
     Type.String({
-      minLength: 6,
-      maxLength: 6,
+      minLength: 9,
+      maxLength: 9,
       pattern: '^tt[0-9]{7}',
     }),
     Type.Null(),
@@ -55,6 +55,7 @@ export const MovieDetails = Type.Object({
     Type.Object({
       iso_639_1: Type.String(),
       name: Type.String(),
+      english_name: Type.Union([Type.String(), Type.Null()]),
     }),
   ),
   status: Type.Union([

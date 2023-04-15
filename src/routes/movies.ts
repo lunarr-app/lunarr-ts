@@ -9,7 +9,14 @@ const movies = async (fastify: FastifyInstance, options: RouteShorthandOptions) 
     const {limit, page, query} = req.query;
 
     // Build query object based on search query
-    const search = query ? {$text: {$search: query}} : {};
+    const search = query
+      ? {
+          $text: {
+            $search: query,
+            $caseSensitive: false,
+          },
+        }
+      : {};
 
     // Find movies in the database based on query and pagination
     const totalMovies = await moviesLists.countDocuments(search);

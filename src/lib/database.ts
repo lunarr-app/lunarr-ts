@@ -48,10 +48,5 @@ await moviesLists.createIndexes([
       'tmdb.belongs_to_collection.name': 2,
       files: 1,
     },
-    // Set case-insensitive flag to true
-    collation: {
-      locale: 'en',
-      strength: 2,
-    },
   },
 ]);

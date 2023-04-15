@@ -9,7 +9,6 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
     '/',
     {
       ...options,
-      schema: SCHEMA_SECUIRTY,
       // Pre-handler to check if user is an admin
       preHandler: async (request, reply) => {
         // Get the user from the database by api key
@@ -39,7 +38,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
   );
 
   // Get user by api key
-  fastify.get('/me', {...options, schema: SCHEMA_SECUIRTY}, async (res, reply) => {
+  fastify.get('/me', options, async (res, reply) => {
     // Get the user from the database by api key
     const user = await usersAccounts.findOne(
       {api_key: res.headers['x-api-key']},
@@ -59,7 +58,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
   });
 
   // User data update
-  fastify.put<UserUpdateType>('/me', {schema: UserUpdate}, async (request, reply) => {
+  fastify.put<UserUpdateType>('/me', {...options, schema: UserUpdate}, async (request, reply) => {
     // Find the user based on the API key provided in the request header
     const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']});
 

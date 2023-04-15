@@ -7,6 +7,7 @@ import users from './routes/users.js';
 import movies from './routes/movies.js';
 import {usersAccounts} from './lib/database.js';
 import {RootEndointSchema} from './schema/root.js';
+import {SCHEMA_SECUIRTY} from './schema/auth.js';
 import {env} from './lib/config.js';
 
 const preValidation = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -82,6 +83,7 @@ app.get<{Reply: Static<typeof RootEndointSchema>}>(
 app.register(auth, {prefix: 'auth'});
 app.register(users, {
   prefix: 'users',
+  schema: SCHEMA_SECUIRTY,
   preValidation,
 });
 

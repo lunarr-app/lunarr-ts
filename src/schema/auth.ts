@@ -56,19 +56,30 @@ export type UserSignupType = {
   Reply: Static<(typeof UserSignup.response)[200]> | Static<(typeof UserSignup.response)[409]>;
 };
 
-export const UserUpdateSchema = Type.Object(
-  {
-    displayname: Type.Optional(
-      Type.String({
-        minLength: 1,
-        maxLength: 48,
-      }),
-    ),
-    password: Type.Optional(Type.String({minLength: 6, maxLength: 32})),
-    sex: Type.Optional(Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')])),
+export const UserUpdate = {
+  body: Type.Object(
+    {
+      displayname: Type.Optional(
+        Type.String({
+          minLength: 1,
+          maxLength: 48,
+        }),
+      ),
+      password: Type.Optional(Type.String({minLength: 6, maxLength: 32})),
+      sex: Type.Optional(Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')])),
+    },
+    {additionalProperties: false},
+  ),
+  response: {
+    200: Type.Literal('User data updated'),
+    404: Type.Literal('User not found'),
   },
-  {additionalProperties: false},
-);
+};
+
+export type UserUpdateType = {
+  Body: Static<typeof UserUpdate.body>;
+  Reply: Static<(typeof UserUpdate.response)[200]> | Static<(typeof UserUpdate.response)[404]>;
+};
 
 export const UserSchemaMongo = Type.Object({
   displayname: Type.String({

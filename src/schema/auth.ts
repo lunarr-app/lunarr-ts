@@ -8,7 +8,7 @@ export const API_HEADERS = Type.Object({
 
 export type API_HEADERS_TYPE = Static<typeof API_HEADERS>;
 
-export const SCHEMA_SECUIRTY = {
+export const SCHEMA_SECURITY = {
   security: [
     {
       ApiKeyAuth: [],
@@ -89,7 +89,7 @@ export const UserUpdate = {
     200: Type.Literal('User data updated'),
     404: Type.Literal('User not found'),
   },
-  ...SCHEMA_SECUIRTY,
+  ...SCHEMA_SECURITY,
 };
 
 export type UserUpdateType = {

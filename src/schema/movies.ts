@@ -1,5 +1,5 @@
 import {Type, Static} from '@sinclair/typebox';
-import {API_HEADERS, SCHEMA_SECUIRTY} from './auth.js';
+import {API_HEADERS, SCHEMA_SECURITY} from './auth.js';
 import {MovieDetails} from '../lib/tmdb/schema/movie.js';
 
 export const MovieResultsQuery = {
@@ -32,7 +32,7 @@ export const MovieResultsQuery = {
       total: Type.Integer(),
     }),
   },
-  ...SCHEMA_SECUIRTY,
+  ...SCHEMA_SECURITY,
 };
 
 export type MovieResultsQueryType = {

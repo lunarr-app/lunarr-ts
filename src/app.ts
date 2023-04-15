@@ -6,7 +6,7 @@ import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
 import {RootEndointSchema} from './schema/root.js';
-import {SCHEMA_SECUIRTY} from './schema/auth.js';
+import {SCHEMA_SECURITY} from './schema/auth.js';
 import {isValidApiKey} from './routes/util.js';
 import {env} from './lib/config.js';
 
@@ -76,7 +76,7 @@ app.get<{Reply: Static<typeof RootEndointSchema>}>(
 app.register(auth, {prefix: 'auth'});
 app.register(users, {
   prefix: 'users',
-  schema: SCHEMA_SECUIRTY,
+  schema: SCHEMA_SECURITY,
   preValidation: isValidApiKey,
 });
 

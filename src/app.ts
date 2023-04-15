@@ -52,7 +52,7 @@ await app.register(swagger, {
       version: '0.0.1',
     },
     securityDefinitions: {
-      apiKey: {
+      ApiKeyAuth: {
         type: 'apiKey',
         name: 'x-api-key',
         in: 'header',

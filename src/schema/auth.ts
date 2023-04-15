@@ -2,6 +2,12 @@ import {Type, Static} from '@sinclair/typebox';
 
 const usernamePattern = '^[0-9a-zA-Z_-]+$';
 
+export const API_HEADERS = Type.Object({
+  'x-api-key': Type.String(),
+});
+
+export type API_HEADERS_TYPE = Static<typeof API_HEADERS>;
+
 export const UserLogin = {
   body: Type.Object({
     username: Type.String({
@@ -57,6 +63,7 @@ export type UserSignupType = {
 };
 
 export const UserUpdate = {
+  headers: API_HEADERS,
   body: Type.Object(
     {
       displayname: Type.Optional(
@@ -77,6 +84,7 @@ export const UserUpdate = {
 };
 
 export type UserUpdateType = {
+  Headers: Static<typeof UserUpdate.headers>;
   Body: Static<typeof UserUpdate.body>;
   Reply: Static<(typeof UserUpdate.response)[200]> | Static<(typeof UserUpdate.response)[404]>;
 };

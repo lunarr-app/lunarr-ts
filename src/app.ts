@@ -1,21 +1,14 @@
-import fastify, {FastifyRequest, FastifyReply} from 'fastify';
+import fastify from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerui from '@fastify/swagger-ui';
 import {Static} from '@sinclair/typebox';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
-import {usersAccounts} from './lib/database.js';
 import {RootEndointSchema} from './schema/root.js';
 import {SCHEMA_SECUIRTY} from './schema/auth.js';
+import {isValidApiKey} from './routes/util.js';
 import {env} from './lib/config.js';
-
-const preValidation = async (request: FastifyRequest, reply: FastifyReply) => {
-  const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']}, {projection: {_id: 1}});
-  if (!user) {
-    reply.code(401).send({error: 'Unauthorized', message: 'Invalid API key'});
-  }
-};
 
 // Fastify instance
 const app = fastify({
@@ -84,13 +77,13 @@ app.register(auth, {prefix: 'auth'});
 app.register(users, {
   prefix: 'users',
   schema: SCHEMA_SECUIRTY,
-  preValidation,
+  preValidation: isValidApiKey,
 });
 
 // Movies endpoint
 app.register(movies, {
   prefix: 'media',
-  preValidation,
+  preValidation: isValidApiKey,
 });
 
 export default app;

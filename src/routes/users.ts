@@ -1,6 +1,7 @@
 import argon2 from 'argon2';
 import {usersAccounts} from '../lib/database.js';
-import {SCHEMA_SECUIRTY, UserUpdate, UserUpdateType} from '../schema/auth.js';
+import {UserUpdate, UserUpdateType} from '../schema/auth.js';
+import {isAdmin} from './util.js';
 import type {FastifyInstance, RouteShorthandOptions} from 'fastify';
 
 const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) => {
@@ -9,17 +10,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
     '/',
     {
       ...options,
-      // Pre-handler to check if user is an admin
-      preHandler: async (request, reply) => {
-        // Get the user from the database by api key
-        const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']});
-
-        // Return 401 error if user not found or not an admin
-        if (user?.role !== 'admin') {
-          reply.status(401).send('Unauthorized');
-          return;
-        }
-      },
+      preHandler: isAdmin,
     },
     async () => {
       // Find all users in the database and exclude password hash from response

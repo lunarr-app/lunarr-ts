@@ -3,7 +3,15 @@ import {Type, Static} from '@sinclair/typebox';
 export const MovieDetails = Type.Object({
   adult: Type.Boolean(),
   backdrop_path: Type.Union([Type.String(), Type.Null()]),
-  belongs_to_collection: Type.Union([Type.Object({}), Type.Null()]),
+  belongs_to_collection: Type.Union([
+    Type.Object({
+      id: Type.Integer(),
+      name: Type.String(),
+      poster_path: Type.Union([Type.String(), Type.Null()]),
+      backdrop_path: Type.Union([Type.String(), Type.Null()]),
+    }),
+    Type.Null(),
+  ]),
   budget: Type.Integer(),
   genres: Type.Array(
     Type.Object({

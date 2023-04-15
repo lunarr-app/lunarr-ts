@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 import {usersAccounts} from '../lib/database.js';
-import {UserUpdate, UserUpdateType} from '../schema/auth.js';
+import {SCHEMA_SECUIRTY, UserUpdate, UserUpdateType} from '../schema/auth.js';
 import type {FastifyInstance, RouteShorthandOptions} from 'fastify';
 
 const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) => {
@@ -9,6 +9,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
     '/',
     {
       ...options,
+      schema: SCHEMA_SECUIRTY,
       // Pre-handler to check if user is an admin
       preHandler: async (request, reply) => {
         // Get the user from the database by api key
@@ -38,7 +39,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
   );
 
   // Get user by api key
-  fastify.get('/me', options, async (res, reply) => {
+  fastify.get('/me', {...options, schema: SCHEMA_SECUIRTY}, async (res, reply) => {
     // Get the user from the database by api key
     const user = await usersAccounts.findOne(
       {api_key: res.headers['x-api-key']},

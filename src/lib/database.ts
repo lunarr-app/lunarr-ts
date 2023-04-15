@@ -35,6 +35,7 @@ await moviesLists.createIndexes([
       'tmdb.title': 'text',
       'tmdb.original_title': 'text',
       'tmdb.belongs_to_collection.name': 'text',
+      files: 'text',
     },
     // Set name to easily drop or manage the index later
     name: 'movie_text_search_index',
@@ -45,6 +46,7 @@ await moviesLists.createIndexes([
       'tmdb.title': 10,
       'tmdb.original_title': 5,
       'tmdb.belongs_to_collection.name': 2,
+      files: 1,
     },
     // Set case-insensitive flag to true
     collation: {

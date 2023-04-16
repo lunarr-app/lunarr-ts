@@ -38,6 +38,30 @@ export const MovieResultsQuery = {
 };
 
 export type MovieResultsQueryType = {
+  Headers: Static<typeof MovieResultsQuery.headers>;
   Querystring: Static<typeof MovieResultsQuery.querystring>;
   Reply: Static<(typeof MovieResultsQuery.response)[200]>;
+};
+
+export const MovieStreamParams = {
+  headers: Type.Composite([
+    API_HEADERS,
+    Type.Object({
+      range: Type.Optional(Type.String()),
+    }),
+  ]),
+  params: Type.Object({
+    tmdb_id: Type.String(),
+  }),
+  response: {
+    200: Type.Uint8Array(),
+    206: Type.Uint8Array(),
+    404: Type.Literal('Movie not found'),
+  },
+  ...SCHEMA_SECURITY,
+};
+
+export type MovieStreamParamsType = {
+  Headers: Static<typeof MovieStreamParams.headers>;
+  Params: Static<typeof MovieStreamParams.params>;
 };

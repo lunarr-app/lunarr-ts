@@ -3,21 +3,23 @@ import {env} from './config.js';
 import {Static} from '@sinclair/typebox';
 import {UserSchemaMongo} from '../schema/auth';
 import type {MovieList} from '../types/database';
+import {logger} from './logger.js';
 
-// Create a new MongoClient instance with the MongoDB URI and options
+logger.info('Creating new MongoClient instance');
 export const mongo = new MongoClient(env.MONGODB_URI, {retryWrites: true, w: 'majority'});
 
-// Connect to the MongoDB database
+logger.info(`Connecting to MongoDB database at ${env.MONGODB_URI}`);
 await mongo.connect();
 
 // Ping the database to verify the connection
+logger.info('Pinging MongoDB database');
 await mongo.db().command({ping: 1});
 
-// Export MongoDB collections as typed objects
+logger.info('Exporting MongoDB collections as typed objects');
 export const usersAccounts = mongo.db().collection<Static<typeof UserSchemaMongo>>('users.accounts');
 export const moviesLists = mongo.db().collection<MovieList>('movies.lists');
 
-// Create indexes on relevant fields for improved query performance
+logger.info('Creating indexes on relevant fields for improved query performance');
 await usersAccounts.createIndexes([
   {
     key: {username: 1},
@@ -27,7 +29,7 @@ await usersAccounts.createIndexes([
   },
 ]);
 
-// Create a text index for improved text searching performanc
+logger.info('Creating a text index for improved text searching performance');
 await moviesLists.createIndexes([
   {
     // Index for text search on movie titles and collection names

@@ -37,11 +37,8 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
         projection: {password: 0}, // Exclude password hash from response
       },
     );
-
     if (!user) {
-      // Return 404 error if user not found
-      reply.status(404).send('User not found');
-      return;
+      return reply.notFound('User not found');
     }
 
     // Return user object if found
@@ -52,11 +49,8 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
   fastify.put<UserUpdateType>('/me', {...options, schema: UserUpdate}, async (request, reply) => {
     // Find the user based on the API key provided in the request header
     const user = await usersAccounts.findOne({api_key: request.headers['x-api-key']});
-
-    // If the user is not found, return a 404 error
     if (!user) {
-      reply.status(404).send('User not found');
-      return;
+      return reply.notFound('User not found');
     }
 
     // Update the user data based on the values provided in the request body
@@ -73,7 +67,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
     await usersAccounts.updateOne({_id: user._id}, {$set: user});
 
     // Return a success message
-    reply.send('User data updated');
+    reply.code(200).send('User data updated');
   });
 };
 

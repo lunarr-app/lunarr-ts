@@ -56,7 +56,6 @@ export const MovieStreamParams = {
   response: {
     200: Type.Uint8Array(),
     206: Type.Uint8Array(),
-    404: Type.Literal('Movie not found'),
   },
   ...SCHEMA_SECURITY,
 };

@@ -48,8 +48,7 @@ const movies = async (fastify: FastifyInstance, options: RouteShorthandOptions) 
 
       if (!filePath) {
         logger.error(`Movie ${request.params.tmdb_id} not found`);
-        reply.status(404).send('Movie not found');
-        return;
+        return reply.notFound('Movie not found');
       }
 
       const fileStat = statSync(filePath);

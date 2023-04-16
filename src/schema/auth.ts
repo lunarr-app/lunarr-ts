@@ -31,13 +31,12 @@ export const UserLogin = {
     200: Type.Object({
       api_key: Type.String(),
     }),
-    401: Type.Literal('Invalid username or password'),
   },
 };
 
 export type UserLoginType = {
   Body: Static<typeof UserLogin.body>;
-  Reply: Static<(typeof UserLogin.response)[200]> | Static<(typeof UserLogin.response)[401]>;
+  Reply: Static<(typeof UserLogin.response)[200]>;
 };
 
 export const UserSignup = {
@@ -57,17 +56,13 @@ export const UserSignup = {
     sex: Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')], {default: 'unknown'}),
   }),
   response: {
-    200: Type.Literal('User created successfully.'),
-    409: Type.Union([
-      Type.Literal('An user already exists with that username.'),
-      Type.Literal('Username is not allowed. Please choose a different username.'),
-    ]),
+    201: Type.Literal('User created successfully.'),
   },
 };
 
 export type UserSignupType = {
   Body: Static<typeof UserSignup.body>;
-  Reply: Static<(typeof UserSignup.response)[200]> | Static<(typeof UserSignup.response)[409]>;
+  Reply: Static<(typeof UserSignup.response)[201]>;
 };
 
 export const UserUpdate = {
@@ -87,7 +82,6 @@ export const UserUpdate = {
   ),
   response: {
     200: Type.Literal('User data updated'),
-    404: Type.Literal('User not found'),
   },
   ...SCHEMA_SECURITY,
 };
@@ -95,7 +89,7 @@ export const UserUpdate = {
 export type UserUpdateType = {
   Headers: Static<typeof UserUpdate.headers>;
   Body: Static<typeof UserUpdate.body>;
-  Reply: Static<(typeof UserUpdate.response)[200]> | Static<(typeof UserUpdate.response)[404]>;
+  Reply: Static<(typeof UserUpdate.response)[200]>;
 };
 
 export const UserSchemaMongo = Type.Object({

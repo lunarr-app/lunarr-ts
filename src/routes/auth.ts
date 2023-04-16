@@ -21,7 +21,7 @@ const auth = async (fastify: FastifyInstance) => {
     }
 
     // Return 401 Unauthorized error if invalid credentials
-    reply.status(401).send('Invalid username or password');
+    return reply.unauthorized('Invalid username or password');
   });
 
   // User signup
@@ -30,14 +30,12 @@ const auth = async (fastify: FastifyInstance) => {
 
     // Check if the user already exists
     if (user) {
-      reply.status(409).send('An user already exists with that username.');
-      return;
+      return reply.conflict('An user already exists with that username.');
     }
 
     // Check if the username is restricted
     if (RESTRICTED_USERNAMES.includes(req.body.username.toLowerCase())) {
-      reply.status(409).send('Username is not allowed. Please choose a different username.');
-      return;
+      return reply.conflict('Username is not allowed. Please choose a different username.');
     }
 
     // Hash the user password and insert into the database
@@ -56,7 +54,7 @@ const auth = async (fastify: FastifyInstance) => {
     });
 
     // Return a success message
-    reply.status(200).send('User created successfully.');
+    reply.status(201).send('User created successfully.');
   });
 };
 

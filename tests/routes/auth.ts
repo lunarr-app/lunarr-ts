@@ -22,7 +22,7 @@ test.serial('POST /auth/signup --> register a new user', async (t) => {
     payload: requestBody,
   });
 
-  t.is(response.statusCode, 200);
+  t.is(response.statusCode, 201);
   t.is(response.body, 'User created successfully.');
 
   // Check that the user was inserted into the database
@@ -64,5 +64,9 @@ test.serial('POST /auth/signup --> signup rejects restricted usernames', async (
   });
 
   t.is(response.statusCode, 409);
-  t.is(response.body, 'Username is not allowed. Please choose a different username.');
+  t.deepEqual(response.json(), {
+    statusCode: 409,
+    error: 'Conflict',
+    message: 'Username is not allowed. Please choose a different username.',
+  });
 });

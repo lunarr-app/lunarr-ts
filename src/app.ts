@@ -9,6 +9,7 @@ import {RootEndointSchema} from './schema/root.js';
 import {SCHEMA_SECURITY} from './schema/auth.js';
 import {isValidApiKey} from './routes/util.js';
 import {env} from './lib/config.js';
+import {logger} from './lib/logger.js';
 
 // Fastify instance
 const app = fastify({
@@ -38,6 +39,7 @@ const app = fastify({
 });
 
 // Register swagger to generate openapi specs
+logger.info('Registering swagger and swagger UI');
 await app.register(swagger, {
   swagger: {
     info: {
@@ -58,6 +60,7 @@ await app.register(swaggerui, {
   routePrefix: '/documentation',
 });
 
+logger.info('Setting up endpoints');
 // Root endpoint for ping
 app.get<{Reply: Static<typeof RootEndointSchema>}>(
   '/',
@@ -85,5 +88,7 @@ app.register(movies, {
   prefix: 'media',
   preValidation: isValidApiKey,
 });
+
+logger.info('All endpoints registered successfully');
 
 export default app;

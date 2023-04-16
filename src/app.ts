@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import sensible from '@fastify/sensible';
 import swagger from '@fastify/swagger';
 import swaggerui from '@fastify/swagger-ui';
 import {Static} from '@sinclair/typebox';
@@ -60,7 +61,10 @@ await app.register(swaggerui, {
   routePrefix: '/documentation',
 });
 
-logger.info('Setting up endpoints');
+// Register sensible plugin
+logger.info('Registering sensible plugin');
+await app.register(sensible);
+
 // Root endpoint for ping
 app.get<{Reply: Static<typeof RootEndointSchema>}>(
   '/',
@@ -76,6 +80,7 @@ app.get<{Reply: Static<typeof RootEndointSchema>}>(
 );
 
 // User auth and info
+logger.info('Registering auth and users routes');
 app.register(auth, {prefix: 'auth'});
 app.register(users, {
   prefix: 'users',
@@ -84,6 +89,7 @@ app.register(users, {
 });
 
 // Movies endpoint
+logger.info('Registering media routes');
 app.register(movies, {
   prefix: 'media',
   preValidation: isValidApiKey,

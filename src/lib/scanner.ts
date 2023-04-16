@@ -2,6 +2,7 @@ import TMDB from 'tmdb-ts';
 import {opendir} from 'fs/promises';
 import {filenameParse} from '@ctrl/video-filename-parser';
 import {moviesLists} from './database.js';
+import {logger} from './logger.js';
 import type {MovieDetailsType} from './tmdb/schema/movie.js';
 
 // List of valid video file extensions
@@ -16,43 +17,51 @@ const tmdb = new TMDB('accessToken');
  * @returns {Promise<void>} - A promise that resolves when the scanning is complete.
  */
 export const scanMediaDirectory = async (path: string): Promise<void> => {
-  // Use `opendir` instead of `readdir` to efficiently iterate over the contents of the directory.
-  // `opendir` returns an asynchronous iterator that allows us to iterate over the directory's contents one by one,
-  // without loading everything into memory at once. This makes it more memory-efficient and less error-prone than `readdir`.
-  const directory = await opendir(path);
+  logger.info(`Scanning directory ${path}`);
 
-  // Iterate over each entry in the directory
-  for await (const entry of directory) {
-    const entryPath = `${path}/${entry.name}`;
-    // Recursively call the function if the entry is a directory
-    if (entry.isDirectory()) {
-      await scanMediaDirectory(entryPath);
-    } else {
-      // Check if the entry is a valid video file
-      const extension = entry.name.split('.').pop()?.toLowerCase();
-      if (extension && VIDEO_EXTENSIONS.includes(extension)) {
-        // Check if the movie already exists in the database
-        const movieData = await moviesLists.findOne({files: entryPath});
+  try {
+    const directory = await opendir(path);
 
-        // If the movie doesn't exist, query TMDB for information about the movie
-        if (!movieData) {
-          const videoInfo = filenameParse(entry.name);
-          const movie = await tmdb.search.movies({
-            query: videoInfo.title,
-            year: videoInfo.year ? Number(videoInfo.year) : undefined,
-            include_adult: true,
-          });
+    // Iterate over each entry in the directory
+    for await (const entry of directory) {
+      const entryPath = `${path}/${entry.name}`;
 
-          // If TMDB returns a valid movie result, get more detailed information and insert it into the database
-          if (movie.results.at(0)) {
-            const data = await tmdb.movies.details(movie.results[0].id);
-            await moviesLists.insertOne({
-              tmdb: data as MovieDetailsType,
-              files: [entryPath],
+      // Recursively call the function if the entry is a directory
+      if (entry.isDirectory()) {
+        await scanMediaDirectory(entryPath);
+      } else {
+        const extension = entry.name.split('.').pop()?.toLowerCase();
+
+        // Check if the entry is a valid video file
+        if (extension && VIDEO_EXTENSIONS.includes(extension)) {
+          // Check if the movie already exists in the database
+          const movieData = await moviesLists.findOne({files: entryPath});
+
+          if (!movieData) {
+            const videoInfo = filenameParse(entry.name);
+            const movie = await tmdb.search.movies({
+              query: videoInfo.title,
+              year: videoInfo.year ? Number(videoInfo.year) : undefined,
+              include_adult: true,
             });
+
+            if (movie.results.at(0)) {
+              const data = await tmdb.movies.details(movie.results[0].id);
+              await moviesLists.insertOne({
+                tmdb: data as MovieDetailsType,
+                files: [entryPath],
+              });
+              logger.info(`Added movie ${entry.name} to database`);
+            } else {
+              logger.warn(`No valid TMDB result for ${entry.name}`);
+            }
+          } else {
+            logger.info(`Movie ${entryPath} already exists in the database`);
           }
         }
       }
     }
+  } catch (error) {
+    logger.error(`Error scanning directory ${path}: ${error}`);
   }
 };

@@ -7,7 +7,7 @@ import type {FastifyInstance, RouteShorthandOptions} from 'fastify';
 
 const movies = async (fastify: FastifyInstance, options: RouteShorthandOptions) => {
   // Get movie lists with pagination and search
-  fastify.get<MovieResultsQueryType>('/movies', {...options, schema: MovieResultsQuery}, async (req) => {
+  fastify.get<MovieResultsQueryType>('/', {...options, schema: MovieResultsQuery}, async (req) => {
     // Extract query parameters using destructuring
     const {limit, page, query} = req.query;
 
@@ -40,7 +40,7 @@ const movies = async (fastify: FastifyInstance, options: RouteShorthandOptions) 
 
   // Stream media file
   fastify.get<MovieStreamParamsType>(
-    '/movies/:tmdb_id/stream',
+    '/:tmdb_id/stream',
     {...options, schema: MovieStreamParams},
     async (request, reply) => {
       const movie = await moviesLists.findOne({'tmdb.id': request.params.tmdb_id});

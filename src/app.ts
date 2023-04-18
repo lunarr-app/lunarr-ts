@@ -6,6 +6,7 @@ import {Static} from '@sinclair/typebox';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
+import tvShows from './routes/tv-shows.js';
 import {RootEndointSchema} from './schema/root.js';
 import {SCHEMA_SECURITY} from './schema/auth.js';
 import {isValidApiKey} from './routes/util.js';
@@ -88,10 +89,14 @@ app.register(users, {
   preValidation: isValidApiKey,
 });
 
-// Movies endpoint
+// Media endpoints
 logger.info('Registering media routes');
 app.register(movies, {
-  prefix: 'media',
+  prefix: 'media/movies',
+  preValidation: isValidApiKey,
+});
+app.register(tvShows, {
+  prefix: 'media/tv-shows',
   preValidation: isValidApiKey,
 });
 

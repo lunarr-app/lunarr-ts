@@ -3,13 +3,16 @@ import sensible from '@fastify/sensible';
 import swagger from '@fastify/swagger';
 import swaggerui from '@fastify/swagger-ui';
 import {Static} from '@sinclair/typebox';
+
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import movies from './routes/movies.js';
 import tvShows from './routes/tv-shows.js';
-import {RootEndointSchema} from './schema/root.js';
+
+import {RootEndpointSchema} from './schema/root.js';
 import {SCHEMA_SECURITY} from './schema/auth.js';
 import {isValidApiKey} from './routes/util.js';
+
 import {env} from './lib/config.js';
 import {logger} from './lib/logger.js';
 
@@ -23,7 +26,7 @@ const app = fastify({
             return {
               method: req.method,
               url: req.url,
-              remoteAddress: req.headers['X-Forwarded-For'] || (req as any).ip,
+              remoteAddress: req.headers['x-forwarded-for'] || (req as any).ip,
             };
           },
         },
@@ -67,13 +70,13 @@ logger.info('Registering sensible plugin');
 await app.register(sensible);
 
 // Root endpoint for ping
-app.get<{Reply: Static<typeof RootEndointSchema>}>(
+app.get<{Reply: Static<typeof RootEndpointSchema>}>(
   '/',
   {
     logLevel: 'error',
     schema: {
       response: {
-        200: RootEndointSchema,
+        200: RootEndpointSchema,
       },
     },
   },

@@ -2,8 +2,9 @@ import {MongoClient} from 'mongodb';
 import {env} from './config.js';
 import {Static} from '@sinclair/typebox';
 import {UserSchemaMongo} from '../schema/auth';
-import type {MovieList, TvShowsList} from '../types/database';
 import {logger} from './logger.js';
+import type {MovieList, TvShowsList} from '../types/database';
+import type {WatchHistoryType} from '../schema/watch';
 
 logger.info('Creating new MongoClient instance');
 export const mongo = new MongoClient(env.MONGODB_URI, {retryWrites: true, w: 'majority'});
@@ -19,16 +20,38 @@ logger.info('Exporting MongoDB collections as typed objects');
 export const usersAccounts = mongo.db().collection<Static<typeof UserSchemaMongo>>('users.accounts');
 export const moviesLists = mongo.db().collection<MovieList>('movies.lists');
 export const tvShowsLists = mongo.db().collection<TvShowsList>('tv_shows.lists');
+export const watchHistory = mongo.db().collection<WatchHistoryType>('watch.history');
 
 logger.info('Creating indexes on relevant fields for improved query performance');
 await usersAccounts.createIndexes([
+  // Index usernames for faster lookups
   {
+    name: 'username_index',
     key: {username: 1},
+    unique: true,
+    background: true,
   },
+  // Index API keys for faster authentication
   {
+    name: 'api_key_index',
     key: {api_key: 1},
+    unique: true,
+    background: true,
   },
 ]);
+await watchHistory.createIndex(
+  // Define the index keys
+  {
+    user_id: 1,
+    tmdb_id: 1,
+  },
+  // Define the index options
+  {
+    name: 'user_watch_history_index',
+    unique: false,
+    background: true,
+  },
+);
 
 logger.info('Creating text indexes for improved searching performance');
 await moviesLists.createIndexes([

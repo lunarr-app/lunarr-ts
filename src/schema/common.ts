@@ -37,3 +37,13 @@ export const SEARCH_WITH_PAGINATION = Type.Object({
     description: 'The page number of results to return.',
   }),
 });
+
+// Define the response file stream schema
+export const RESPONSE_FILE_STREAM = {
+  200: Type.Uint8Array({
+    description: 'The full stream of the movie or tv-episode if no "range" header is provided',
+  }),
+  206: Type.Uint8Array({
+    description: 'A partial stream of the movie or tv-episode if a "range" header is provided',
+  }),
+};

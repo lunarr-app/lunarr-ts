@@ -1,5 +1,5 @@
 import {Type, Static} from '@sinclair/typebox';
-import {API_HEADERS, SCHEMA_SECURITY, SEARCH_WITH_PAGINATION} from './common.js';
+import {API_HEADERS, SCHEMA_SECURITY, SEARCH_WITH_PAGINATION, RESPONSE_FILE_STREAM} from './common.js';
 import {MovieDetails} from '../lib/tmdb/schema/movie.js';
 
 // API schema for movie results with search endpoint
@@ -56,14 +56,7 @@ export const MovieStreamParams = {
       description: 'The TMDb ID of the movie to stream',
     }),
   }),
-  response: {
-    200: Type.Uint8Array({
-      description: 'The full stream of the movie if no "range" header is provided',
-    }),
-    206: Type.Uint8Array({
-      description: 'A partial stream of the movie if a "range" header is provided',
-    }),
-  },
+  response: RESPONSE_FILE_STREAM,
   ...SCHEMA_SECURITY,
 };
 

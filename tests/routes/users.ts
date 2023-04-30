@@ -1,12 +1,12 @@
 import test from 'ava';
 import app from '../../src/app.js';
-import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 import dayjs from 'dayjs';
 import {mongo, usersAccounts} from '../../src/lib/database.js';
 
 test.before(async () => {
   // Create an admin user to use in the tests
-  const adminPasswordHash = await argon2.hash('adminpassword');
+  const adminPasswordHash = bcrypt.hashSync('adminpassword');
   await usersAccounts.insertOne({
     displayname: 'Admin User',
     username: 'admin',
@@ -86,6 +86,6 @@ test.serial('PUT /users/me --> updates the current user', async (t) => {
   const updatedUser = await usersAccounts.findOne({api_key: 'adminapikey'});
   t.is(updatedUser?.displayname, 'Updated Admin User');
   t.is(updatedUser?.sex, 'male');
-  const passwordMatches = await argon2.verify(updatedUser!.password, 'newpassword');
+  const passwordMatches = bcrypt.compareSync('newpassword', updatedUser!.password);
   t.true(passwordMatches);
 });

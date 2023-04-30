@@ -1,4 +1,4 @@
-import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 import {usersAccounts} from '../lib/database.js';
 import {UserUpdate, UserUpdateType} from '../schema/auth.js';
 import {isAdmin} from './util.js';
@@ -59,7 +59,7 @@ const users = async (fastify: FastifyInstance, options: RouteShorthandOptions) =
 
     // If a new password is provided, hash it and update the user's password
     if (request.body.password) {
-      const passwordHash = await argon2.hash(request.body.password);
+      const passwordHash = bcrypt.hashSync(request.body.password);
       user.password = passwordHash;
     }
 

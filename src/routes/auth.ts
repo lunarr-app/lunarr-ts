@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 import dayjs from 'dayjs';
 import {usersAccounts} from '../lib/database.js';
 import {RESTRICTED_USERNAMES} from '../lib/username.js';
@@ -16,7 +16,7 @@ const auth = async (fastify: FastifyInstance) => {
     const user = await usersAccounts.findOne({username: req.body.username}, {collation});
 
     // Check if the user exists and password is valid
-    if (user && (await argon2.verify(user.password, req.body.password))) {
+    if (user && bcrypt.compareSync(req.body.password, user.password)) {
       return {api_key: user.api_key};
     }
 
@@ -39,7 +39,7 @@ const auth = async (fastify: FastifyInstance) => {
     }
 
     // Hash the user password and insert into the database
-    const passwordHash = await argon2.hash(req.body.password);
+    const passwordHash = bcrypt.hashSync(req.body.password);
     const totalUsers = await usersAccounts.countDocuments(); // Get the total number of users in the database
     const timeNowIso = dayjs().toISOString();
 

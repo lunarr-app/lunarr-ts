@@ -112,7 +112,35 @@ test.after.always(async () => {
   await mongo.db().dropDatabase();
 });
 
-test('should return all TV shows', async (t) => {
+test('should return all TV shows with matching query', async (t) => {
+  const response = await app.inject({
+    method: 'GET',
+    url: '/media/tv-shows?query=Walking',
+    headers: {
+      'x-api-key': 'adminapikey',
+    },
+  });
+  t.is(response.statusCode, 200);
+
+  const tvShows = response.json();
+  t.is(tvShows.results.length, 1);
+});
+
+test('should return empty TV show results array with non-matching query', async (t) => {
+  const response = await app.inject({
+    method: 'GET',
+    url: '/media/tv-shows?query=NonMatching',
+    headers: {
+      'x-api-key': 'adminapikey',
+    },
+  });
+  t.is(response.statusCode, 200);
+
+  const tvShows = response.json();
+  t.is(tvShows.results.length, 0);
+});
+
+test('should return all TV shows without query', async (t) => {
   const response = await app.inject({
     method: 'GET',
     url: '/media/tv-shows',
@@ -121,6 +149,7 @@ test('should return all TV shows', async (t) => {
     },
   });
   t.is(response.statusCode, 200);
+
   const tvShows = response.json();
   t.is(tvShows.results.length, 1);
 });

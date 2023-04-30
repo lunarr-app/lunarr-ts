@@ -70,7 +70,35 @@ test.after.always(async () => {
   await mongo.db().dropDatabase();
 });
 
-test('should return all movies', async (t) => {
+test('should return all movies with matching query', async (t) => {
+  const response = await app.inject({
+    method: 'GET',
+    url: '/media/movies?query=Redemption',
+    headers: {
+      'x-api-key': 'adminapikey',
+    },
+  });
+  t.is(response.statusCode, 200);
+
+  const movies = response.json();
+  t.is(movies.results.length, 1);
+});
+
+test('should return empty movie results array with non-matching query', async (t) => {
+  const response = await app.inject({
+    method: 'GET',
+    url: '/media/movies?query=NonMatching',
+    headers: {
+      'x-api-key': 'adminapikey',
+    },
+  });
+  t.is(response.statusCode, 200);
+
+  const movies = response.json();
+  t.is(movies.results.length, 0);
+});
+
+test('should return all movies without query', async (t) => {
   const response = await app.inject({
     method: 'GET',
     url: '/media/movies',
@@ -79,6 +107,7 @@ test('should return all movies', async (t) => {
     },
   });
   t.is(response.statusCode, 200);
+
   const movies = response.json();
   t.is(movies.results.length, 1);
 });

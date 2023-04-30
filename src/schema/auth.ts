@@ -15,7 +15,8 @@ export const UserLogin = {
     password: Type.String({
       minLength: 6,
       maxLength: 32,
-      description: "The user's password",
+      description:
+        "The user's password. The 32-character limit is imposed to ensure compatibility with bcrypt's hashing algorithm.",
     }),
   }),
   response: {
@@ -38,7 +39,7 @@ export const UserSignup = {
     displayname: Type.String({
       minLength: 1,
       maxLength: 48,
-      description: "The user's display name",
+      description: 'The display name of the user. It should be between 1 and 48 characters long.',
     }),
     username: Type.String({
       minLength: 2,
@@ -50,7 +51,8 @@ export const UserSignup = {
     password: Type.String({
       minLength: 6,
       maxLength: 32,
-      description: "The user's password",
+      description:
+        "The user's password. The 32-character limit is imposed to ensure compatibility with bcrypt's hashing algorithm.",
     }),
     sex: Type.Union([Type.Literal('male'), Type.Literal('female'), Type.Literal('unknown')], {
       default: 'unknown',

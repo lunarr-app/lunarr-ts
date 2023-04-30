@@ -8,8 +8,10 @@ import type {MovieDetailsType} from './tmdb/schema/movie.js';
 // List of valid video file extensions
 const VIDEO_EXTENSIONS = ['mp4', 'mov', 'avi', 'mkv', 'webm'];
 
-// Create TMDB instance with access token
-const tmdb = new TMDB('accessToken');
+// Create TMDB instance with read access token (v4 auth)
+const tmdb = new TMDB(
+  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMGVlMjVjNzg4OGQ3MGU4NTg3ODU5YzUwNjBhZmYwMCIsInN1YiI6IjVlMzVhMzdmNzZlZWNmMDAxNThmNjliZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._Ati2D39oQJy6sSPwF4-1ooinjEjvuqqMbhXkPqDA6I',
+);
 
 /**
  * Scans a directory for video files and logs information about each file.

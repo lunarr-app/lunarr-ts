@@ -1,4 +1,4 @@
-import TMDB from 'tmdb-ts';
+import {TMDB} from 'tmdb-ts';
 import {opendir} from 'fs/promises';
 import {filenameParse} from '@ctrl/video-filename-parser';
 import {moviesLists} from './database.js';

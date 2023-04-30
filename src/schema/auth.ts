@@ -1,25 +1,8 @@
 import {Type, Static} from '@sinclair/typebox';
+import {API_HEADERS, SCHEMA_SECURITY} from './common.js';
 
 // Regular expression pattern for valid usernames
 const usernamePattern = '^[0-9a-zA-Z_-]+$';
-
-// Define the API headers object schema
-export const API_HEADERS = Type.Object({
-  'x-api-key': Type.String({
-    description: 'The API key to authenticate requests',
-  }),
-});
-
-export type API_HEADERS_TYPE = Static<typeof API_HEADERS>;
-
-// Define the security schema
-export const SCHEMA_SECURITY = {
-  security: [
-    {
-      ApiKeyAuth: [],
-    },
-  ],
-};
 
 // Define the UserLogin schema
 export const UserLogin = {

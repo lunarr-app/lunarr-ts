@@ -10,7 +10,7 @@ import movies from './routes/movies.js';
 import tvShows from './routes/tv-shows.js';
 
 import {RootEndpointSchema} from './schema/root.js';
-import {SCHEMA_SECURITY} from './schema/auth.js';
+import {SCHEMA_SECURITY} from './schema/common.js';
 import {isValidApiKey} from './routes/util.js';
 
 import {env} from './lib/config.js';

@@ -1,28 +1,11 @@
 import {Type, Static} from '@sinclair/typebox';
-import {API_HEADERS, SCHEMA_SECURITY} from './auth.js';
+import {API_HEADERS, SCHEMA_SECURITY, SEARCH_WITH_PAGINATION} from './common.js';
 import {MovieDetails} from '../lib/tmdb/schema/movie.js';
 
 // API schema for movie results with search endpoint
 export const MovieResultsQuery = {
   headers: API_HEADERS,
-  querystring: Type.Object({
-    query: Type.Optional(
-      Type.String({
-        description:
-          'The search query string. If provided, search results will be filtered based on this query string.',
-      }),
-    ),
-    limit: Type.Integer({
-      minimum: 1,
-      default: 20,
-      description: 'The number of results to return per page.',
-    }),
-    page: Type.Integer({
-      minimum: 1,
-      default: 1,
-      description: 'The page number of results to return.',
-    }),
-  }),
+  querystring: SEARCH_WITH_PAGINATION,
   response: {
     200: Type.Object({
       results: Type.Array(

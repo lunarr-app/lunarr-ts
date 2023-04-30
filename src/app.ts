@@ -37,7 +37,7 @@ const app = fastify({
             translateTime: 'h:MM:ss TT',
             errorProps: 'message',
             ignore: 'pid,hostname,req,reqId,err,res,responseTime',
-            messageFormat: '{req.method} {res.statusCode} {req.remoteAddress} {req.url} {msg}',
+            messageFormat: 'fastify {req.method} {res.statusCode} {req.remoteAddress} {req.url} {msg}',
           },
         },
       },

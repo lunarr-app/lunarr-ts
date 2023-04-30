@@ -1,15 +1,28 @@
-import {cleanEnv, str, num, bool} from 'envalid';
-import * as dotenv from 'dotenv';
+import {program} from 'commander';
 import {logger} from './logger.js';
 
-logger.info('Loading environment variables');
-dotenv.config();
+interface Commands {
+  port: number;
+  mongodbUri: string;
+  disableFastifyLogging: boolean;
+}
 
-// Clean and validate environment variables with envalid
-export const env = cleanEnv(process.env, {
-  PORT: num({default: 3000}),
-  MONGODB_URI: str({default: 'mongodb://127.0.0.1:27017/lunarr'}),
-  DISABLE_FASTIFY_LOGGING: bool({default: false}),
-});
+program
+  .option('-p, --port <number>', 'The port number', parseFloat, 3000)
+  .option('--mongodb-uri <string>', 'The MongoDB connection URI', 'mongodb://127.0.0.1:27017/lunarr')
+  .option('--disable-fastify-logging', 'Disable Fastify logging', false)
+  .parse(process.argv);
 
-logger.info('Environment variables loaded and validated successfully');
+// Get the parsed options
+const options = program.opts<Commands>();
+
+// Log the commander options
+logger.info('Commander options:');
+logger.info(options);
+
+// Create the env object
+export const env = {
+  PORT: options.port,
+  MONGODB_URI: options.mongodbUri,
+  DISABLE_FASTIFY_LOGGING: options.disableFastifyLogging,
+};

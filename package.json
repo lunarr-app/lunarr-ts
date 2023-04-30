@@ -11,8 +11,8 @@
     "postlint": "tsc --noemit",
     "prebuild": "eslint .",
     "build": "tsc",
-    "test": "ava",
-    "dev": "nodemon src/server.ts"
+    "test": "ava -- --mongodb-uri mongodb://127.0.0.1:27017/lunarr_test_ava --disable-fastify-logging",
+    "dev": "nodemon src/server.ts --mongodb-uri mongodb://127.0.0.1:27017/lunarr_test"
   },
   "repository": "https://github.com/lunarr-app/lunarr-server",
   "author": "Sayem Chowdhury",
@@ -24,9 +24,8 @@
     "@fastify/swagger-ui": "^1.8.0",
     "@sinclair/typebox": "^0.28.8",
     "bcryptjs": "^2.4.3",
+    "commander": "^10.0.1",
     "dayjs": "^1.11.7",
-    "dotenv": "^16.0.3",
-    "envalid": "^7.3.1",
     "fastify": "^4.17.0",
     "mongodb": "^5.3.0",
     "pino": "^8.11.0",
@@ -53,10 +52,6 @@
     "typescript": "^5.0.4"
   },
   "ava": {
-    "environmentVariables": {
-      "DISABLE_FASTIFY_LOGGING": "true",
-      "MONGODB_URI": "mongodb://127.0.0.1:27017/lunarr_test_ava"
-    },
     "extensions": {
       "ts": "module"
     },

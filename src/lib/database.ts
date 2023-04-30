@@ -80,9 +80,9 @@ await tvShowsLists.createIndexes([
   {
     // Index for text search on TV show titles and tagline
     key: {
-      'tmdb.name': 'text',
-      'tmdb.original_name': 'text',
-      'tmdb.tagline': 'text',
+      'show.name': 'text',
+      'show.original_name': 'text',
+      'show.tagline': 'text',
       files: 'text',
     },
     // Set a name for easy management or removal of the index later
@@ -91,9 +91,9 @@ await tvShowsLists.createIndexes([
     default_language: 'english',
     // Set weights to prioritize results based on field importance
     weights: {
-      'tmdb.name': 10,
-      'tmdb.original_name': 5,
-      'tmdb.tagline': 2,
+      'show.name': 10,
+      'show.original_name': 5,
+      'show.tagline': 2,
       files: 1,
     },
   },
